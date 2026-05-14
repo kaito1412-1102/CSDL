@@ -187,7 +187,7 @@ function renderTable(rows, mon) {
 
       if (isDktdk) {
         const options = Array.from({ length: 10 }, (_, i) => {
-          const v = i + 1;
+          const v = 10 - i; // 10 → 1
           return `<option value="${v}" ${String(val) === String(v) ? 'selected' : ''}>${v}</option>`;
         }).join('');
         return `
@@ -230,6 +230,16 @@ function renderTable(rows, mon) {
 
   document.getElementById('loading-state').classList.add('hidden');
   document.getElementById('table-wrapper').classList.remove('hidden');
+
+  // Hiện stats bar và tính thống kê lần đầu
+  const statsBar = document.getElementById('stats-bar');
+  statsBar.classList.remove('hidden');
+  updateStats();
+
+  // Cập nhật thống kê khi thay đổi mucdatduoc thủ công
+  document.querySelectorAll('[data-type="mucdatduoc"] select').forEach(sel => {
+    sel.addEventListener('change', updateStats);
+  });
 }
 
 // ─── Nhận xét Popup ───────────────────────────────────────────────
@@ -383,6 +393,40 @@ function resetCols(numCols) {
   });
 }
 
+// ─── Thống kê ─────────────────────────────────────────────────────
+
+function updateStats() {
+  const bar = document.getElementById('stats-bar');
+  if (!bar || bar.classList.contains('hidden')) return;
+
+  const diems = [...document.querySelectorAll('[data-type="diemKTDK"] select')]
+    .map(s => parseInt(s.value))
+    .filter(v => !isNaN(v));
+
+  const mdcs = [...document.querySelectorAll('[data-type="mucdatduoc"] select')]
+    .map(s => s.value)
+    .filter(v => v !== '');
+
+  const total      = diems.length;
+  const count910   = diems.filter(v => v >= 9).length;
+  const countT     = mdcs.filter(v => v === 'T').length;
+  const countH     = mdcs.filter(v => v === 'H').length;
+  const daNhap     = diems.length; // số học sinh đã nhập điểm
+
+  const stat = (icon, label, value, color) =>
+    `<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${color} text-sm">
+       <span>${icon}</span>
+       <span class="text-gray-500 text-xs">${label}:</span>
+       <span class="font-bold">${value}</span>
+     </div>`;
+
+  bar.innerHTML =
+    stat('🎯', 'Đã nhập', `${daNhap}/${total || daNhap} hs`, 'border-gray-200 bg-white') +
+    stat('⭐', 'Điểm 9-10', count910, 'border-yellow-200 bg-yellow-50 text-yellow-700') +
+    stat('✅', 'Loại T', countT, 'border-green-200 bg-green-50 text-green-700') +
+    stat('📋', 'Loại H', countH, 'border-blue-200 bg-blue-50 text-blue-700');
+}
+
 // ─── Auto điền mức đạt được khi chọn điểm ────────────────────────
 function autoDanhGia(diemSelect, rowIdx) {
   const diem = parseInt(diemSelect.value);
@@ -395,6 +439,7 @@ function autoDanhGia(diemSelect, rowIdx) {
   if (!mdcSelect) return;
 
   mdcSelect.value = diem >= 9 ? 'T' : 'H';
+  updateStats();
 }
 
 // ─── Start ────────────────────────────────────────────────────────
