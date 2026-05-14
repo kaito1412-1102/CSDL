@@ -1,5 +1,5 @@
 {
-  "column-hide": "A,C,D,E,F,G",
+  "column-hide": "A,C,D,E,F,G, J",
   "mon": [
     {
       "name": "toán",
@@ -15,7 +15,7 @@
       "mucdatduoc": "H10",
       "diemKTDK": "I10",
       "nhanxet": "k10",
-      "pathnhanxet": "csdl-mon-hoc\\congnghe \\nhan-xet.xlsx"
+      "pathnhanxet": "csdl-mon-hoc\\congnghe\\nhan-xet.xlsx"
     }
   ]
 }

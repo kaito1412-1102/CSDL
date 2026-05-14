@@ -252,20 +252,10 @@ function openNhanxetPopup(btn) {
   popupTriggerBtn = btn;
   currentNhanxetInput = btn.closest('td').querySelector('input[type="text"]');
 
-  const popup = document.getElementById('nhanxet-popup');
-  const rect = btn.getBoundingClientRect();
-
-  // Position below the button, keep within viewport
-  let top  = rect.bottom + window.scrollY + 4;
-  let left = rect.left + window.scrollX;
-  if (left + 320 > window.innerWidth) left = window.innerWidth - 328;
-
-  popup.style.top  = top + 'px';
-  popup.style.left = left + 'px';
-
   document.getElementById('nhanxet-search').value = '';
   renderNhanxetList(nhanxetList);
-  popup.classList.remove('hidden');
+  document.getElementById('nhanxet-backdrop').classList.remove('hidden');
+  document.getElementById('nhanxet-popup').classList.remove('hidden');
   setTimeout(() => document.getElementById('nhanxet-search').focus(), 50);
 }
 
@@ -301,18 +291,13 @@ function selectNhanxet(noiDung) {
 
 function closeNhanxetPopup() {
   document.getElementById('nhanxet-popup').classList.add('hidden');
+  document.getElementById('nhanxet-backdrop').classList.add('hidden');
   popupTriggerBtn = null;
   currentNhanxetInput = null;
 }
 
-// Close popup on outside click
-document.addEventListener('click', e => {
-  const popup = document.getElementById('nhanxet-popup');
-  if (popup.classList.contains('hidden')) return;
-  if (!popup.contains(e.target) && e.target !== popupTriggerBtn) {
-    closeNhanxetPopup();
-  }
-});
+// Click backdrop → đóng popup
+document.getElementById('nhanxet-backdrop').addEventListener('click', closeNhanxetPopup);
 
 // ─── Export ───────────────────────────────────────────────────────
 

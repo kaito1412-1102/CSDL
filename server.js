@@ -12,6 +12,11 @@ function getConfig() {
   return JSON.parse(fs.readFileSync(configPath, 'utf8'));
 }
 
+// Trim khoảng trắng thừa khỏi từng thành phần của đường dẫn
+function normPath(p) {
+  return p.split(/[\\/]/).map(s => s.trim()).join(path.sep);
+}
+
 function findMon(monName) {
   const { mon } = getConfig();
   return mon.find(m => m.name === monName);
@@ -46,7 +51,7 @@ app.get('/api/bangdiem/:monName', (req, res) => {
     const mon = findMon(req.params.monName);
     if (!mon) return res.status(404).json({ error: 'Không tìm thấy môn học' });
 
-    const filePath = path.join(__dirname, mon.path);
+    const filePath = path.join(__dirname, normPath(mon.path));
     const wb = XLSX.readFile(filePath);
     const ws = wb.Sheets[wb.SheetNames[0]];
     expandSheetRef(ws);
@@ -64,15 +69,18 @@ app.get('/api/nhanxet/:monName', (req, res) => {
     const mon = findMon(req.params.monName);
     if (!mon) return res.status(404).json({ error: 'Không tìm thấy môn học' });
 
-    const filePath = path.join(__dirname, mon.pathnhanxet.trim());
+    const filePath = path.join(__dirname, normPath(mon.pathnhanxet));
     const wb = XLSX.readFile(filePath);
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
 
-    const list = rows
-      .slice(1)
-      .map(r => ({ ma: String(r[0] || '').trim(), noiDung: String(r[1] || '').trim() }))
-      .filter(r => r.ma);
+    const mapped = rows.map(r => ({
+      ma: String(r[0] || '').trim(),
+      noiDung: String(r[1] || '').trim(),
+    }));
+    // Bỏ qua dòng header nếu có (ô đầu tiên chứa chữ "mã")
+    const startIdx = mapped.length > 0 && mapped[0].ma.toLowerCase().includes('mã') ? 1 : 0;
+    const list = mapped.slice(startIdx).filter(r => r.ma);
 
     res.json(list);
   } catch (e) {
@@ -87,7 +95,7 @@ app.post('/api/export/:monName', (req, res) => {
     if (!mon) return res.status(404).json({ error: 'Không tìm thấy môn học' });
 
     const { cells } = req.body; // [{address: "H10", value: "T"}, ...]
-    const filePath = path.join(__dirname, mon.path);
+    const filePath = path.join(__dirname, normPath(mon.path));
     const wb = XLSX.readFile(filePath);
     const ws = wb.Sheets[wb.SheetNames[0]];
     expandSheetRef(ws);
