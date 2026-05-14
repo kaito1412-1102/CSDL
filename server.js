@@ -90,6 +90,7 @@ app.post('/api/export/:monName', (req, res) => {
     const filePath = path.join(__dirname, mon.path);
     const wb = XLSX.readFile(filePath);
     const ws = wb.Sheets[wb.SheetNames[0]];
+    expandSheetRef(ws);
 
     cells.forEach(({ address, value }) => {
       const addr = address.toUpperCase();
@@ -102,7 +103,8 @@ app.post('/api/export/:monName', (req, res) => {
       };
     });
 
-    XLSX.writeFile(wb, filePath);
+    const resultPath = path.join(path.dirname(filePath), 'result.xlsx');
+    XLSX.writeFile(wb, resultPath);
     res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
