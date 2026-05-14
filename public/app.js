@@ -4,6 +4,7 @@ let currentMon = null;
 let nhanxetList = [];
 let popupTriggerBtn = null;   // button that opened the nhận xét popup
 let currentNhanxetInput = null; // text input to fill when option selected
+let defaultHiddenCols = [];   // cột ẩn mặc định từ config["column-hide"]
 
 // ─── Column Coordinate Utils ──────────────────────────────────────
 
@@ -70,6 +71,8 @@ async function init() {
     const res = await fetch('/api/config');
     const config = await res.json();
     subjects = config.mon || [];
+    defaultHiddenCols = (config['column-hide'] || '')
+      .split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
     renderSidebar(subjects);
   } catch (e) {
     document.getElementById('mon-list').innerHTML =
@@ -152,6 +155,7 @@ function renderTable(rows, mon) {
     letters.map((_, i) => `<col id="col-${i}">`).join('');
 
   renderColFilter(letters);
+  applyDefaultHiddenCols(letters);
 
   // Header row: column letters + row-number placeholder
   document.getElementById('table-head').innerHTML = `
@@ -384,6 +388,16 @@ function renderColFilter(letters) {
 function toggleCol(colIdx, show) {
   const col = document.getElementById('col-' + colIdx);
   if (col) col.style.visibility = show ? '' : 'collapse';
+}
+
+function applyDefaultHiddenCols(letters) {
+  defaultHiddenCols.forEach(letter => {
+    const colIdx = letters.indexOf(letter);
+    if (colIdx === -1) return;
+    toggleCol(colIdx, false);
+    const cb = document.querySelector(`#col-filter input[data-colidx="${colIdx}"]`);
+    if (cb) cb.checked = false;
+  });
 }
 
 function resetCols(numCols) {
