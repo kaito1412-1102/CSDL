@@ -186,7 +186,8 @@ function renderTable(rows, mon) {
         return `
           <td class="editable-cell border border-gray-300 p-0"
               data-row="${rowIdx}" data-col="${colIdx}" data-type="diemKTDK">
-            <select class="cell-select w-full px-2 py-1 focus:outline-none focus:bg-blue-50">
+            <select class="cell-select w-full px-2 py-1 focus:outline-none focus:bg-blue-50"
+                    onchange="autoDanhGia(this, ${rowIdx})">
               <option value=""></option>
               ${options}
             </select>
@@ -336,6 +337,20 @@ async function exportData() {
   } catch (e) {
     showToast('❌ Lỗi kết nối server', true);
   }
+}
+
+// ─── Auto điền mức đạt được khi chọn điểm ────────────────────────
+function autoDanhGia(diemSelect, rowIdx) {
+  const diem = parseInt(diemSelect.value);
+  if (isNaN(diem)) return;
+
+  const mdcTd = document.querySelector(`[data-type="mucdatduoc"][data-row="${rowIdx}"]`);
+  if (!mdcTd) return;
+
+  const mdcSelect = mdcTd.querySelector('select');
+  if (!mdcSelect) return;
+
+  mdcSelect.value = diem >= 9 ? 'T' : 'H';
 }
 
 // ─── Start ────────────────────────────────────────────────────────
