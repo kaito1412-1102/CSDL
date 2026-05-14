@@ -1,0 +1,107 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ── Table ── */
+#grade-table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+#grade-table th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Row number column */
+.col-rownum {
+  width: 36px;
+  min-width: 36px;
+  background: #f3f4f6 !important;
+  color: #9ca3af;
+  user-select: none;
+  text-align: center;
+  font-size: 0.7rem;
+  font-family: monospace;
+}
+
+/* ── Editable cells ── */
+.editable-cell {
+  background: #ffffff;
+  padding: 0 !important;
+}
+
+.editable-cell:focus-within {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+  background: #eff6ff;
+  position: relative;
+  z-index: 1;
+}
+
+.cell-select {
+  height: 100%;
+  min-width: 72px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 4px 6px;
+  appearance: auto;
+}
+
+.cell-select:focus {
+  outline: none;
+  background: #eff6ff;
+}
+
+/* nhận xét input */
+.editable-cell input[type="text"] {
+  border: none;
+  background: transparent;
+  font-size: 0.8rem;
+  min-width: 140px;
+}
+
+.editable-cell input[type="text"]:focus {
+  outline: none;
+  background: #eff6ff;
+}
+
+/* ── Table scroll container ── */
+#table-wrapper .overflow-auto {
+  max-height: calc(100vh - 145px);
+}
+
+#grade-table thead tr {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+/* ── Nhận xét popup ── */
+#nhanxet-popup {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Sidebar ── */
+.mon-btn {
+  border-radius: 8px;
+  transition: background-color 0.15s;
+}
+
+/* ── Scrollbar (webkit) ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

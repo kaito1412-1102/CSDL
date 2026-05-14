@@ -1,0 +1,13 @@
+{
+  "name": "excel-grade-manager",
+  "version": "1.0.0",
+  "description": "Web app nhập điểm từ Excel cho giáo viên",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "xlsx": "0.18.5"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "mon": [
+    {
+      "name": "toán",
+      "path": "csdl-mon-hoc\\toan\\bang-diem.xlsx",
+      "mucdatduoc": "H10",
+      "diemKTDK": "I10",
+      "nhanxet": "k10",
+      "pathnhanxet": "csdl-mon-hoc\\toan\\nhan-xet.xlsx"
+    },
+    {
+      "name": "công nghệ",
+      "path": "csdl-mon-hoc\\congnghe\\bang-diem.xlsx",
+      "mucdatduoc": "H10",
+      "diemKTDK": "I10",
+      "nhanxet": "k10",
+      "pathnhanxet": "csdl-mon-hoc\\congnghe \\nhan-xet.xlsx"
+    }
+  ]
+}
