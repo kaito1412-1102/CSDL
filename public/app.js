@@ -145,8 +145,15 @@ function renderTable(rows, mon) {
   const startRow = Math.min(mdc.row, dktdk.row, nx.row);
   const numCols  = rows.reduce((max, r) => Math.max(max, r.length), 1);
 
-  // Header row: column letters + row-number placeholder
+  // Render colgroup — dùng để ẩn/hiện cột qua CSS visibility:collapse
   const letters = Array.from({ length: numCols }, (_, i) => colIndexToLetter(i));
+  document.getElementById('table-colgroup').innerHTML =
+    `<col id="col-rn">` +
+    letters.map((_, i) => `<col id="col-${i}">`).join('');
+
+  renderColFilter(letters);
+
+  // Header row: column letters + row-number placeholder
   document.getElementById('table-head').innerHTML = `
     <tr class="bg-gray-200 sticky top-0 z-10">
       <th class="col-rownum border border-gray-300 px-2 py-1 text-gray-500 text-xs">#</th>
@@ -337,6 +344,43 @@ async function exportData() {
   } catch (e) {
     showToast('❌ Lỗi kết nối server', true);
   }
+}
+
+// ─── Ẩn / Hiện cột ────────────────────────────────────────────────
+
+function renderColFilter(letters) {
+  const container = document.getElementById('col-filter');
+  const checkboxes = letters.map((l, i) => `
+    <label class="col-toggle inline-flex items-center gap-1 px-2 py-0.5 rounded border border-gray-200 text-xs cursor-pointer hover:bg-gray-100 transition-colors select-none"
+           title="Ẩn/hiện cột ${l}">
+      <input type="checkbox" checked data-colidx="${i}"
+             onchange="toggleCol(${i}, this.checked)"
+             class="accent-blue-600 w-3 h-3">
+      <span class="font-mono font-semibold">${l}</span>
+    </label>`).join('');
+
+  container.innerHTML = `
+    <div class="flex flex-wrap items-center gap-1.5">
+      <span class="text-xs text-gray-500 font-medium mr-1">Hiện cột:</span>
+      ${checkboxes}
+      <button onclick="resetCols(${letters.length})"
+        class="ml-2 px-2.5 py-0.5 text-xs text-blue-600 border border-blue-300 rounded hover:bg-blue-50 transition-colors">
+        Hiện tất cả
+      </button>
+    </div>`;
+  container.classList.remove('hidden');
+}
+
+function toggleCol(colIdx, show) {
+  const col = document.getElementById('col-' + colIdx);
+  if (col) col.style.visibility = show ? '' : 'collapse';
+}
+
+function resetCols(numCols) {
+  for (let i = 0; i < numCols; i++) toggleCol(i, true);
+  document.querySelectorAll('#col-filter input[type="checkbox"]').forEach(cb => {
+    cb.checked = true;
+  });
 }
 
 // ─── Auto điền mức đạt được khi chọn điểm ────────────────────────

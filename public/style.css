@@ -90,6 +90,11 @@ body {
   transition: background-color 0.15s;
 }
 
+/* ── Ẩn cột: visibility collapse chỉ hoạt động với colgroup/col ── */
+#grade-table col[style*="collapse"] {
+  visibility: collapse;
+}
+
 /* ── Scrollbar (webkit) ── */
 ::-webkit-scrollbar {
   width: 6px;

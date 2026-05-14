@@ -56,12 +56,15 @@
 
       <!-- Table -->
       <div id="table-wrapper" class="hidden">
-        <div class="mb-3 flex items-center gap-3 text-xs text-gray-500">
+        <div class="mb-2 flex items-center gap-3 text-xs text-gray-500">
           <span class="inline-flex items-center gap-1"><span class="w-3 h-3 bg-white border border-gray-300 rounded-sm inline-block"></span> Ô nhập liệu</span>
           <span class="inline-flex items-center gap-1"><span class="w-3 h-3 bg-gray-100 border border-gray-300 rounded-sm inline-block"></span> Chỉ đọc</span>
         </div>
+        <!-- Bộ lọc ẩn/hiện cột -->
+        <div id="col-filter" class="mb-3 hidden"></div>
         <div class="overflow-auto rounded-lg shadow">
           <table id="grade-table" class="border-collapse min-w-full bg-white text-sm">
+            <colgroup id="table-colgroup"></colgroup>
             <thead id="table-head"></thead>
             <tbody id="table-body"></tbody>
           </table>
