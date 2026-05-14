@@ -217,7 +217,7 @@ function renderTable(rows, mon) {
       }
 
       // Read-only
-      const textColor = isDataRow ? 'text-gray-700' : 'text-gray-500';
+      const textColor = isDataRow ? 'text-gray-900' : 'text-gray-500';
       return `<td class="border border-gray-300 px-3 py-1 ${textColor} whitespace-nowrap">${esc(String(val))}</td>`;
     }).join('');
 
