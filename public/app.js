@@ -157,6 +157,9 @@ function renderTable(rows, mon) {
   renderColFilter(letters);
   applyDefaultHiddenCols(letters);
 
+  // Cột nhận xét rộng gấp đôi — set trực tiếp lên col và sẽ set lên td sau khi render
+  const NX_WIDTH = '500px';
+
   // Header row: column letters + row-number placeholder
   document.getElementById('table-head').innerHTML = `
     <tr class="bg-gray-200 sticky top-0 z-10">
@@ -207,7 +210,7 @@ function renderTable(rows, mon) {
 
       if (isNx) {
         return `
-          <td class="editable-cell border border-gray-300 p-0"
+          <td class="editable-cell border border-gray-300 p-0" style="min-width:${NX_WIDTH}"
               data-row="${rowIdx}" data-col="${colIdx}" data-type="nhanxet">
             <div class="flex items-center">
               <input type="text" value="${esc(String(val))}"
