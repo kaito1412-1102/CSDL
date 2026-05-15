@@ -29,10 +29,16 @@
         <h2 id="mon-title" class="text-base font-semibold text-gray-800">Chọn môn học để bắt đầu</h2>
         <p id="mon-subtitle" class="text-xs text-gray-400 mt-0.5"></p>
       </div>
-      <button id="btn-export" onclick="exportData()"
-        class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow">
-        💾 Xuất Excel
-      </button>
+      <div class="flex items-center gap-2">
+        <button id="btn-quanlynx" onclick="openQuanlyNxModal()"
+          class="hidden bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow">
+          📝 Nhận xét
+        </button>
+        <button id="btn-export" onclick="exportData()"
+          class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow">
+          💾 Xuất Excel
+        </button>
+      </div>
     </div>
 
     <!-- Table area -->
@@ -75,6 +81,66 @@
 
     </div>
   </main>
+
+  <!-- Backdrop quản lý nhận xét -->
+  <div id="quanlynx-backdrop" class="hidden fixed inset-0 z-40 bg-black/40"></div>
+
+  <!-- Modal quản lý nhận xét -->
+  <div id="quanlynx-modal" class="hidden fixed z-50 bg-white rounded-xl shadow-2xl flex flex-col"
+       style="width:680px; max-width:95vw; max-height:85vh; top:50%; left:50%; transform:translate(-50%,-50%)">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-gray-200 flex-shrink-0">
+      <span class="font-semibold text-gray-800">📝 Quản lý nhận xét — <span id="quanlynx-title" class="text-blue-700"></span></span>
+      <button onclick="closeQuanlyNxModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-4 flex-1 overflow-y-auto">
+      <div class="flex items-center gap-2 mb-3 text-xs text-gray-500 font-semibold uppercase tracking-wide">
+        <span class="w-24 flex-shrink-0">Mã</span>
+        <span class="flex-1">Nội dung nhận xét</span>
+        <span class="w-8"></span>
+      </div>
+      <div id="quanlynx-list" class="space-y-2"></div>
+      <button onclick="addNxRow()"
+        class="mt-4 px-3 py-1.5 text-sm text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors">
+        + Thêm nhận xét
+      </button>
+    </div>
+    <div class="px-5 py-3 border-t border-gray-200 flex justify-end gap-3 flex-shrink-0">
+      <button onclick="closeQuanlyNxModal()"
+        class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">Huỷ</button>
+      <button onclick="saveQuanlyNx()"
+        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">💾 Lưu</button>
+    </div>
+  </div>
+
+  <!-- Backdrop quản lý nhận xét -->
+  <div id="quanlynx-backdrop" class="hidden fixed inset-0 z-40 bg-black/40"></div>
+
+  <!-- Modal quản lý nhận xét -->
+  <div id="quanlynx-modal" class="hidden fixed z-50 bg-white rounded-xl shadow-2xl flex flex-col"
+       style="width:680px; max-width:95vw; max-height:85vh; top:50%; left:50%; transform:translate(-50%,-50%)">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-gray-200 flex-shrink-0">
+      <span class="font-semibold text-gray-800">📝 Quản lý nhận xét — <span id="quanlynx-title" class="text-blue-700"></span></span>
+      <button onclick="closeQuanlyNxModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+    </div>
+    <div class="p-4 flex-1 overflow-y-auto">
+      <div class="flex items-center gap-2 mb-3 text-xs text-gray-500 font-semibold uppercase tracking-wide">
+        <span class="w-24 flex-shrink-0">Mã</span>
+        <span class="flex-1">Nội dung nhận xét</span>
+        <span class="w-8"></span>
+      </div>
+      <div id="quanlynx-list" class="space-y-2"></div>
+      <button onclick="addNxRow()"
+        class="mt-4 px-3 py-1.5 text-sm text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors">
+        + Thêm nhận xét
+      </button>
+    </div>
+    <div class="px-5 py-3 border-t border-gray-200 flex justify-end gap-3 flex-shrink-0">
+      <button onclick="closeQuanlyNxModal()"
+        class="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">Huỷ</button>
+      <button onclick="saveQuanlyNx()"
+        class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">💾 Lưu</button>
+    </div>
+  </div>
 
   <!-- Backdrop -->
   <div id="nhanxet-backdrop" class="hidden fixed inset-0 z-40 bg-black/30"></div>

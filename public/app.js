@@ -110,6 +110,7 @@ async function selectMon(index) {
   document.getElementById('mon-title').textContent = `Môn: ${mon.name}`;
   document.getElementById('mon-subtitle').textContent = mon.path;
   document.getElementById('btn-export').classList.remove('hidden');
+  document.getElementById('btn-quanlynx').classList.remove('hidden');
 
   document.getElementById('empty-state').classList.add('hidden');
   document.getElementById('table-wrapper').classList.add('hidden');
@@ -443,6 +444,178 @@ function autoDanhGia(diemSelect, rowIdx) {
   mdcSelect.value = diem >= 9 ? 'T' : 'H';
   updateStats();
 }
+
+// ─── Quản lý nhận xét ────────────────────────────────────────────
+
+function openQuanlyNxModal() {
+  if (!currentMon) return;
+  document.getElementById('quanlynx-title').textContent = currentMon.name;
+  renderQuanlyNxList([...nhanxetList]);
+  document.getElementById('quanlynx-backdrop').classList.remove('hidden');
+  document.getElementById('quanlynx-modal').classList.remove('hidden');
+  document.querySelectorAll('#quanlynx-list textarea').forEach(ta => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+}
+
+function closeQuanlyNxModal() {
+  document.getElementById('quanlynx-modal').classList.add('hidden');
+  document.getElementById('quanlynx-backdrop').classList.add('hidden');
+}
+
+function renderQuanlyNxList(list) {
+  const container = document.getElementById('quanlynx-list');
+  if (!list.length) {
+    container.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Chưa có nhận xét nào. Nhấn "+ Thêm" để bắt đầu.</p>';
+    return;
+  }
+  container.innerHTML = list.map((item, i) => `
+    <div class="flex items-start gap-2 group" data-nx-idx="${i}">
+      <input type="text" value="${esc(item.ma)}" placeholder="Mã (VD: T1)"
+        class="w-24 flex-shrink-0 px-2 py-1.5 border border-gray-300 rounded text-sm font-mono focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 mt-0.5">
+      <textarea placeholder="Nội dung nhận xét..."
+        class="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 resize-none overflow-hidden"
+        rows="1" spellcheck="false"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'">${esc(item.noiDung)}</textarea>
+      <button onclick="deleteNxRow(${i})"
+        class="flex-shrink-0 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity px-1 text-base mt-1"
+        title="Xoá">🗑️</button>
+    </div>`).join('');
+}
+
+function addNxRow() {
+  const list = getQuanlyNxList();
+  list.push({ ma: '', noiDung: '' });
+  renderQuanlyNxList(list);
+  const rows = document.querySelectorAll('#quanlynx-list [data-nx-idx]');
+  const lastRow = rows[rows.length - 1];
+  if (lastRow) lastRow.querySelector('input').focus();
+}
+
+function deleteNxRow(idx) {
+  const list = getQuanlyNxList();
+  list.splice(idx, 1);
+  renderQuanlyNxList(list);
+}
+
+function getQuanlyNxList() {
+  return [...document.querySelectorAll('#quanlynx-list [data-nx-idx]')].map(row => ({
+    ma: row.querySelector('input').value.trim(),
+    noiDung: row.querySelector('textarea').value.trim(),
+  }));
+}
+
+async function saveQuanlyNx() {
+  if (!currentMon) return;
+  const list = getQuanlyNxList().filter(item => item.ma);
+
+  try {
+    const res = await fetch('/api/nhanxet/' + encodeURIComponent(currentMon.name), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ list }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      nhanxetList = list;
+      showToast('✅ Đã lưu danh sách nhận xét!');
+      closeQuanlyNxModal();
+    } else {
+      showToast('❌ Lỗi: ' + (data.error || 'Không lưu được'), true);
+    }
+  } catch (e) {
+    showToast('❌ Lỗi kết nối server', true);
+  }
+}
+
+document.getElementById('quanlynx-backdrop').addEventListener('click', closeQuanlyNxModal);
+
+// ─── Quản lý nhận xét ────────────────────────────────────────────
+
+function openQuanlyNxModal() {
+  if (!currentMon) return;
+  document.getElementById('quanlynx-title').textContent = currentMon.name;
+  renderQuanlyNxList([...nhanxetList]);
+  document.getElementById('quanlynx-backdrop').classList.remove('hidden');
+  document.getElementById('quanlynx-modal').classList.remove('hidden');
+  document.querySelectorAll('#quanlynx-list textarea').forEach(ta => {
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+  });
+}
+
+function closeQuanlyNxModal() {
+  document.getElementById('quanlynx-modal').classList.add('hidden');
+  document.getElementById('quanlynx-backdrop').classList.add('hidden');
+}
+
+function renderQuanlyNxList(list) {
+  const container = document.getElementById('quanlynx-list');
+  if (!list.length) {
+    container.innerHTML = '<p class="text-gray-400 text-sm text-center py-4">Chưa có nhận xét nào. Nhấn "+ Thêm" để bắt đầu.</p>';
+    return;
+  }
+  container.innerHTML = list.map((item, i) => `
+    <div class="flex items-start gap-2 group" data-nx-idx="${i}">
+      <input type="text" value="${esc(item.ma)}" placeholder="Mã (VD: T1)"
+        class="w-24 flex-shrink-0 px-2 py-1.5 border border-gray-300 rounded text-sm font-mono focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 mt-0.5">
+      <textarea placeholder="Nội dung nhận xét..."
+        class="flex-1 px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200 resize-none overflow-hidden"
+        rows="1" spellcheck="false"
+        oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'">${esc(item.noiDung)}</textarea>
+      <button onclick="deleteNxRow(${i})"
+        class="flex-shrink-0 text-gray-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity px-1 text-base mt-1"
+        title="Xoá">🗑️</button>
+    </div>`).join('');
+}
+
+function addNxRow() {
+  const list = getQuanlyNxList();
+  list.push({ ma: '', noiDung: '' });
+  renderQuanlyNxList(list);
+  const rows = document.querySelectorAll('#quanlynx-list [data-nx-idx]');
+  const lastRow = rows[rows.length - 1];
+  if (lastRow) lastRow.querySelector('input').focus();
+}
+
+function deleteNxRow(idx) {
+  const list = getQuanlyNxList();
+  list.splice(idx, 1);
+  renderQuanlyNxList(list);
+}
+
+function getQuanlyNxList() {
+  return [...document.querySelectorAll('#quanlynx-list [data-nx-idx]')].map(row => ({
+    ma: row.querySelector('input').value.trim(),
+    noiDung: row.querySelector('textarea').value.trim(),
+  }));
+}
+
+async function saveQuanlyNx() {
+  if (!currentMon) return;
+  const list = getQuanlyNxList().filter(item => item.ma);
+
+  try {
+    const res = await fetch('/api/nhanxet/' + encodeURIComponent(currentMon.name), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ list }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      nhanxetList = list;
+      showToast('✅ Đã lưu danh sách nhận xét!');
+      closeQuanlyNxModal();
+    } else {
+      showToast('❌ Lỗi: ' + (data.error || 'Không lưu được'), true);
+    }
+  } catch (e) {
+    showToast('❌ Lỗi kết nối server', true);
+  }
+}
+
+document.getElementById('quanlynx-backdrop').addEventListener('click', closeQuanlyNxModal);
 
 // ─── Start ────────────────────────────────────────────────────────
 init();

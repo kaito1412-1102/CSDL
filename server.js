@@ -111,8 +111,29 @@ app.post('/api/export/:monName', (req, res) => {
       };
     });
 
-    const resultPath = path.join(path.dirname(filePath), 'result.xlsx');
-    XLSX.writeFile(wb, resultPath);
+    XLSX.writeFile(wb, filePath);
+    res.json({ success: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /api/nhanxet/:monName — ghi danh sách nhận xét vào file Excel
+app.post('/api/nhanxet/:monName', (req, res) => {
+  try {
+    const mon = findMon(req.params.monName);
+    if (!mon) return res.status(404).json({ error: 'Không tìm thấy môn học' });
+
+    const { list } = req.body; // [{ma, noiDung}]
+    if (!Array.isArray(list)) return res.status(400).json({ error: 'Dữ liệu không hợp lệ' });
+
+    const filePath = path.join(__dirname, normPath(mon.pathnhanxet));
+    const rows = list.map(item => [item.ma, item.noiDung]);
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, filePath);
+
     res.json({ success: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
