@@ -1,0 +1,53 @@
+{
+  "column-hide": "A,C, E, F, H, I, J, K",
+  "mon": [
+	{
+      "name": "Tiếng Việt",
+      "path": "csdl-mon-hoc\\tv\\tv.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\tv\\nhan-xet.xlsx"
+    },
+    {
+      "name": "Toán",
+      "path": "csdl-mon-hoc\\toan\\toan.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\toan\\nhan-xet.xlsx"
+    },
+    {
+      "name": "công nghệ",
+      "path": "csdl-mon-hoc\\congnghe\\congnghe.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\congnghe\\nhan-xet.xlsx"
+    },
+	{
+      "name": "hoạt động trải nghiệm",
+      "path": "csdl-mon-hoc\\hdtn\\hdtn.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\hdtn\\nhan-xet.xlsx"
+    },
+	{
+      "name": "Đạo Đức",
+      "path": "csdl-mon-hoc\\daoduc\\daoduc.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\daoduc\\nhan-xet.xlsx"
+    },
+    {
+      "name": "Tự nhiên xã hội",
+      "path": "csdl-mon-hoc\\tnxh\\tnxh.xlsx",
+      "mucdatduoc": "D10",
+      "diemKTDK": "K10",
+      "nhanxet": "G10",
+      "pathnhanxet": "csdl-mon-hoc\\tnxh\\nhan-xet.xlsx"
+    }
+  ]
+}
